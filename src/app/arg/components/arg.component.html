@@ -1,0 +1,47 @@
+<div class='arg-wrapper' [ngStyle]="{'width':innerWidth+'px' , 'height':innerHeight + 'px' }">
+  <div routerLink='/home' class='back-arrow'> < </div>
+  <div [ngStyle]="{ 'opacity': playerActive$ != '' ? '0' : '1' }" class='field'></div>
+  <div  class='players-wrapper'>
+    <button
+
+    *ngFor='let player of teamArray$'
+    [ngStyle]="{
+      'position':'absolute' ,
+      'left':playerActive$ == player.name ? '-40%' : 'calc(' + player.marginLeft + ' - 50px)' ,
+      'top':playerActive$ == player.name ? (innerHeight/2-150) +'px' : player.marginTop,
+      'display': playerActive$ == player.name || playerActive$ == '' ? 'flex' : 'none'
+    }"
+    (click)="playerClicked(player.name)"
+    [ngClass]="spinner == player.name ? 'circle spin' : 'circle-before'">
+      <div class='button-content'>{{player.name == 'DiMaria' ? 'Di Maria' : player.name == 'DePaul' ? 'De Paul' : player.name}}</div>
+    </button>
+  </div>
+  <div [ngStyle]="{ 'position':'absolute' , 'opacity': playerActive$ != '' ? '1' : '0' }" class='stats-wrapper'>
+    <div *ngFor='let stat of allPlayerStats$[playerActive$] | keyvalue' style='width:100% ; height:90px ; margin:5px; display:flex;flex-direction:row'>
+      <div class='player-stats-key'>
+        {{
+          stat.key == 'assistPerc' ? 'assist %' :
+          stat.key == 'goalPercPerGame' ? 'goals %' :
+          stat.key == 'passPerc' ? 'pass %' :
+          stat.key == 'goalsAgainstPerc' ? 'goals against %' :
+          stat.key == 'cleanSheetPerc' ? 'clean sheet %' :
+          stat.key == 'savePerc' ? 'save %' :
+          stat.key == 'savePercPenalties' ? 'save penalties %' :
+          stat.key
+        }}
+      </div>
+      <div  class='player-stats-content-wrapper'>
+        <div class='player-stats-keys-child-wrapper'>
+          <div *ngFor='let param of objectValues(stat.value) | keyvalue;let i = index' class='player-stats-keys-child' >
+            {{i==0 ? 'wc' : i==1 ? 'league' : 'max'}}
+          </div>
+        </div>
+        <div style='flex-direction:column; flex:10; display:flex;'>
+          <div *ngFor='let param of objectValues(stat.value) | keyvalue;let i = index' class='player-stats-content-child' [ngStyle]="add(playerActive$ , param.value , stat.key , i)">
+            {{param.value}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
