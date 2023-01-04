@@ -1,5 +1,8 @@
 <div class='france-wrapper' [ngStyle]="{'width':innerWidth+'px' , 'height':innerHeight + 'px' }">
   <div routerLink='/home' class='back-arrow'> < </div>
+  <div class='loader-trophy-wrapper'>
+    <img class='loader-trophy-image' src='assets/img/trophy.png'/>
+  </div>
   <div [ngStyle]="{ 'opacity': playerActive$ != '' ? '0' : '1' }" class='field'></div>
   <div  class='players-wrapper'>
     <button

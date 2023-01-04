@@ -64,7 +64,6 @@ export class ArgComponent {
     return Object.values(obj);
   }
   add(name: string , first: any , stats: any , i: number) {
-    console.log(first , stats , 'stats?')
     let styles = {
     '--size':
     first != 0 && name != 'Martinez' ? (((first / this.maxStats$[stats]) * (100)) + '%') :
@@ -110,7 +109,6 @@ export class ArgComponent {
       this.playerActive$ = '';
       this.spinner = '';
     }
-    console.log(this.playerActive$ , player , '<------->')
   }
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {

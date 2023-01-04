@@ -1,4 +1,7 @@
 <div class='arg-wrapper' [ngStyle]="{'width':innerWidth+'px' , 'height':innerHeight + 'px' }">
+  <div class='loader-trophy-wrapper'>
+    <img class='loader-trophy-image' src='assets/img/trophy.png'/>
+  </div>
   <div routerLink='/home' class='back-arrow'> < </div>
   <div [ngStyle]="{ 'opacity': playerActive$ != '' ? '0' : '1' }" class='field'></div>
   <div  class='players-wrapper'>
