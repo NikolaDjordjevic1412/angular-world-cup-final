@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { LoaderModule } from 'src/app/loader/loader.module';
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
+import { HomeModule } from 'src/app/home/home.module';
 
 @NgModule({
   declarations: [
@@ -15,6 +16,7 @@ import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
     BrowserModule,
     AppRoutingModule,
     LoaderModule,
+    HomeModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireDatabaseModule
   ],

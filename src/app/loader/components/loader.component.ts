@@ -44,12 +44,14 @@ export class LoaderComponent {
       if(this.networkStatus){
         this.database.list('/teams').snapshotChanges().subscribe((snapshot)=>{
           snapshot.forEach((childSnapshot ) =>{
+            console.log(childSnapshot  , 'childSnap')
             let countryObj: any = childSnapshot.payload.val();
             this.loadCountriesService.addCountry('assets/img/' + countryObj['src']  , countryObj['index'] , countryObj['route'])
           });
           if(snapshot != null){
             this.loader$ = true;
             console.log('+')
+            this.router.navigate(['home'])
           }
           else{
             this.loader$ = false;

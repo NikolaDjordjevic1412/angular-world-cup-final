@@ -1,0 +1,10 @@
+<div class='home-page-wrapper' [ngStyle]="{'width':innerWidth+'px' , 'height':innerHeight + 'px' }">
+  <button *ngFor='let img of imageArray$'  class='country-button' >
+    <img *ngIf="img.index != 1" src={{img.src}} style='width:100%; height:100%;'/>
+    <div *ngIf="img.index == 1" class='vs-wrapper'>
+      <p class='vs-paragraph'>
+        vs
+      </p>
+    </div>
+  </button>
+</div>
