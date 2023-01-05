@@ -54,7 +54,7 @@
     flex-direction: row;
   }
   .country-button {
-    display: none;
+    display:none;
   }
   .loader-trophy-wrapper {
     width:20%;
