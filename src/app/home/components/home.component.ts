@@ -1,29 +1,37 @@
-import { Component , HostListener } from '@angular/core';
-import { LoadCountriesService } from 'src/app/loader/services/loadCountries.service';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {CountryService} from "../../logic/services/country.service";
+import {Subject, takeUntil} from "rxjs";
+import {Country} from "../../logic/types/country.entity";
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
-export class HomeComponent {
-  todosValue$: string = '';
-  imageArray$: any;
-  public innerWidth: any;
-  public innerHeight: any;
+export class HomeComponent implements OnInit, OnDestroy {
+  private readonly _onDestroy = new Subject<void>();
 
-  constructor( private loadCountriesService: LoadCountriesService ) {
-    this.loadCountriesService.countriesArray$.subscribe((imgs)=>{
-      this.imageArray$=  imgs;
-    })
+  homeTeam: Country | undefined;
+  guestTeam: Country | undefined;
+
+  constructor(
+    protected _svcCountry: CountryService,
+  ) {
+
   }
+
   ngOnInit(): void {
-    this.innerWidth = window.innerWidth;
-    this.innerHeight = window.innerHeight;
+    this._svcCountry.list().pipe(
+      takeUntil(this._onDestroy),
+    ).subscribe(([homeTeam, guestTeam]: Country[]) => {
+      this.homeTeam = homeTeam;
+      this.guestTeam = guestTeam;
+    });
   }
-  @HostListener('window:resize', ['$event'])
-  onResize(event: any) {
-    this.innerWidth = window.innerWidth;
-    this.innerHeight = window.innerHeight;
+
+  ngOnDestroy(): void {
+    this._onDestroy.next();
+    this._onDestroy.complete();
   }
+
 }

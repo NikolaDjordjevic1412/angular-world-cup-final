@@ -9,6 +9,7 @@ import {AngularFireDatabaseModule} from '@angular/fire/compat/database';
 import {HomeModule} from 'src/app/home/home.module';
 import {ArgModule} from 'src/app/arg/arg.module';
 import {FranceModule} from 'src/app/france/france.module';
+import {LogicModule} from "./logic/logic.module";
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import {FranceModule} from 'src/app/france/france.module';
     BrowserModule,
     AppRoutingModule,
     LoaderModule,
+    LogicModule,
     HomeModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireDatabaseModule,
