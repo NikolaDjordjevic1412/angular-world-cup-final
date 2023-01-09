@@ -1,10 +1,9 @@
-import { Component , HostListener } from '@angular/core';
-// import { GlobalService } from 'src/app/globalService/services/global.service';
-import { Observable , Subscription , merge, of , fromEvent} from 'rxjs';
-import { Router } from '@angular/router';
-import { AngularFireDatabase  } from '@angular/fire/compat/database';
-import { map } from 'rxjs/operators';
-import { LoadCountriesService } from 'src/app/loader/services/loadCountries.service';
+import {Component, HostListener} from '@angular/core';
+import {fromEvent, merge, of, Subscription} from 'rxjs';
+import {Router} from '@angular/router';
+import {AngularFireDatabase} from '@angular/fire/compat/database';
+import {map} from 'rxjs/operators';
+import {LoadCountriesService} from 'src/app/loader/services/loadCountries.service';
 
 
 @Component({
@@ -21,11 +20,15 @@ export class LoaderComponent {
   networkStatus: boolean = false;
   networkStatus$: Subscription = Subscription.EMPTY;
 
-  constructor( private loadCountriesService: LoadCountriesService , private router: Router , private database: AngularFireDatabase ) {
-    this.loadCountriesService.countriesArray$.subscribe((countriesArray)=>{
-
+  constructor(
+    private loadCountriesService: LoadCountriesService,
+    private router: Router,
+    private database: AngularFireDatabase,
+  ) {
+    this.loadCountriesService.countriesArray$.subscribe(() => {
     })
   }
+
   checkNetworkStatus() {
     this.networkStatus = navigator.onLine;
     this.networkStatus$ = merge(
@@ -33,34 +36,35 @@ export class LoaderComponent {
       fromEvent(window, 'online'),
       fromEvent(window, 'offline')
     )
-    .pipe(map(() => navigator.onLine))
-    .subscribe(status => {
-      this.networkStatus = status;
-    });
+      .pipe(map(() => navigator.onLine))
+      .subscribe(status => {
+        this.networkStatus = status;
+      });
   }
+
   ngOnInit(): void {
     setTimeout(() => {
       this.checkNetworkStatus();
-      if(this.networkStatus){
-        this.database.list('/teams').snapshotChanges().subscribe((snapshot)=>{
-          snapshot.forEach((childSnapshot ) =>{
+      if (this.networkStatus) {
+        this.database.list('/teams').snapshotChanges().subscribe((snapshot) => {
+          snapshot.forEach((childSnapshot) => {
             let countryObj: any = childSnapshot.payload.val();
-            this.loadCountriesService.addCountry('assets/img/' + countryObj['src']  , countryObj['index'] , countryObj['route'])
+            this.loadCountriesService.addCountry('assets/img/' + countryObj['src'], countryObj['index'], countryObj['route'])
           });
-          if(snapshot != null){
+          if (snapshot != null) {
             this.loader$ = true;
             this.router.navigate(['home'])
-          }
-          else{
+          } else {
             this.loader$ = false;
           }
         })
       }
-    } , 2000)
+    }, 2000)
 
     this.innerWidth = window.innerWidth;
     this.innerHeight = window.innerHeight;
   }
+
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
     this.innerWidth = window.innerWidth;
