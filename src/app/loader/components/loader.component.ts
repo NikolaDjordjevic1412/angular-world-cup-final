@@ -1,10 +1,10 @@
-import {Component, HostListener} from '@angular/core';
+import {Component, HostListener , OnInit} from '@angular/core';
 import {fromEvent, merge, of, Subscription} from 'rxjs';
 import {Router} from '@angular/router';
 import {AngularFireDatabase} from '@angular/fire/compat/database';
-import {map} from 'rxjs/operators';
+import {map, take} from 'rxjs/operators';
 import {LoadCountriesService} from 'src/app/loader/services/loadCountries.service';
-
+import {CountryService} from "../../logic/services/country.service";
 
 @Component({
   selector: 'app-loader',
@@ -13,7 +13,7 @@ import {LoadCountriesService} from 'src/app/loader/services/loadCountries.servic
 })
 
 
-export class LoaderComponent {
+export class LoaderComponent implements OnInit {
   loader$ = false;
   public innerWidth: any;
   public innerHeight: any;
@@ -21,6 +21,7 @@ export class LoaderComponent {
   networkStatus$: Subscription = Subscription.EMPTY;
 
   constructor(
+    protected _svcCountry: CountryService,
     private loadCountriesService: LoadCountriesService,
     private router: Router,
     private database: AngularFireDatabase,
@@ -43,15 +44,19 @@ export class LoaderComponent {
   }
 
   ngOnInit(): void {
+    this._svcCountry.truncate();
+    this._svcCountry.initialize();
+
     setTimeout(() => {
       this.checkNetworkStatus();
       if (this.networkStatus) {
-        this.database.list('/teams').snapshotChanges().subscribe((snapshot) => {
-          snapshot.forEach((childSnapshot) => {
-            let countryObj: any = childSnapshot.payload.val();
-            this.loadCountriesService.addCountry('assets/img/' + countryObj['src'], countryObj['index'], countryObj['route'])
-          });
-          if (snapshot != null) {
+        
+        this.database.list('/countries').valueChanges().subscribe(([value]) => {
+          const {argentina , france} = value as any;
+          console.log(argentina , france , 'snap')
+          this.loadCountriesService.addCountry(argentina['log'], argentina['ord'], argentina['id'])
+          this.loadCountriesService.addCountry(france['log'], france['ord'], france['id'])
+          if (value != null) {
             this.loader$ = true;
             this.router.navigate(['home'])
           } else {

@@ -21,6 +21,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+
     this._svcCountry.list().pipe(
       takeUntil(this._onDestroy),
     ).subscribe(([homeTeam, guestTeam]: Country[]) => {
