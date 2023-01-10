@@ -1,5 +1,5 @@
-import {Component, HostListener , OnInit} from '@angular/core';
-import {fromEvent, merge, of, Subscription} from 'rxjs';
+import {Component, HostListener, OnInit} from '@angular/core';
+import {from, fromEvent, merge, of, Subscription} from 'rxjs';
 import {Router} from '@angular/router';
 import {AngularFireDatabase} from '@angular/fire/compat/database';
 import {map, take} from 'rxjs/operators';
@@ -30,7 +30,7 @@ export class LoaderComponent implements OnInit {
     })
   }
 
-  checkNetworkStatus() {
+  #checkNetworkStatus() {
     this.networkStatus = navigator.onLine;
     this.networkStatus$ = merge(
       of(null),
@@ -44,27 +44,15 @@ export class LoaderComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this._svcCountry.truncate();
-    this._svcCountry.initialize();
-
-    setTimeout(() => {
-      this.checkNetworkStatus();
-      if (this.networkStatus) {
-        
-        this.database.list('/countries').valueChanges().subscribe(([value]) => {
-          const {argentina , france} = value as any;
-          console.log(argentina , france , 'snap')
-          this.loadCountriesService.addCountry(argentina['log'], argentina['ord'], argentina['id'])
-          this.loadCountriesService.addCountry(france['log'], france['ord'], france['id'])
-          if (value != null) {
-            this.loader$ = true;
+    this.#checkNetworkStatus();
+    if (this.networkStatus) {
+      from(this._svcCountry.reset())
+        .subscribe(numOfCountries => {
+          setTimeout(() => {
             this.router.navigate(['home'])
-          } else {
-            this.loader$ = false;
-          }
-        })
-      }
-    }, 2000)
+          }, 2000)
+        });
+    }
 
     this.innerWidth = window.innerWidth;
     this.innerHeight = window.innerHeight;

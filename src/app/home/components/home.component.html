@@ -4,7 +4,7 @@
   </div>
   <button *ngIf="homeTeam" class='country-button'>
     <img [routerLink]="'/' + homeTeam.route" routerLinkActive="active" ariaCurrentWhenActive="page"
-         *ngIf="homeTeam.ord != 1" src={{homeTeam.logo}} style='width:100%; height:100%;'/>
+         src={{homeTeam.logo}} style='width:100%; height:100%;'/>
   </button>
   <button class='country-button'>
     <div class='vs-wrapper'>
@@ -13,6 +13,6 @@
   </button>
   <button *ngIf="guestTeam" class='country-button'>
     <img [routerLink]="'/' + guestTeam.route" routerLinkActive="active" ariaCurrentWhenActive="page"
-         *ngIf="guestTeam.ord != 1" src={{guestTeam.logo}} style='width:100%; height:100%;'/>
+         src={{guestTeam.logo}} style='width:100%; height:100%;'/>
   </button>
 </div>

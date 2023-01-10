@@ -6,17 +6,13 @@ export class Country {
    * ISO 3166 - alpha 2
    */
   id?: string;
-  ord: number = 0;
   logo?: string;
+  name?: string;
   route?: string;
 
   constructor(payload: DataSnapshot) {
-    const {key: id} = payload, {src, index: ord, route} = payload.val();
-    // TODO@nik: Cleanup this once the database is fixed
-    if (route === "none") {
-      throw new Error('Invalid')
-    }
-    Object.assign(this, {id, ord, logo: `assets/img/${src}`, route});
+    const {key: id} = payload, {logo, name, route} = payload.val();
+    Object.assign(this, {id, name, logo: `assets/img/${logo}`, route});
   }
 
 }
